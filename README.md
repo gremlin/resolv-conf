@@ -12,15 +12,15 @@ out and about 30 minutes to document the process.
 ## Prepare
 
 The local computer has to be prepared.  This only needs to be done once.  The steps below...
-* Clone the fork
-* Navigate to the clone
-* Add a remote
-* Check the remotes
 
 ``` bash
+# Clone the fork
 git clone git@github.com:gremlin/resolv-conf.git
+# Navigate to the clone
 cd resolv-conf
+# Add a remote
 git remote add upstream https://github.com/tailhook/resolv-conf.git
+# Check the remotes
 git remote -v
 ```
 
