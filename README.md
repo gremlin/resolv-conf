@@ -94,6 +94,9 @@ git checkout master
 # Fetch any changes
 git fetch upstream
 
+# Review the changes
+git diff upstream/master
+
 # Merge those changes
 git merge upstream/master
 
