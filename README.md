@@ -9,6 +9,57 @@ upstream is quite stable so updates are expected to be infrequent.
 Automating the synchronization is not worth the effort.  It will take a few hours to get automation
 wrung out versus about 30 minutes to document the process.  We'll just document.
 
+## Using
+
+This has already been done for Agent.
+
+Using the work-in-progress is fairly easy.  In the root `Cargo.toml` file add the following to
+enable `no-strict`.
+
+``` TOML
+[patch.crates-io]
+resolv-conf = {version="0.7", git="https://github.com/gremlin/resolv-conf.git", branch="gremlin", features=["no-strict"]}
+```
+
+Build the project.  Carefully check the `Cargo.lock` file.  If everything worked then things that
+depend on `resolv-conf` will have entries like the following where `resolv-conf` is simply included
+in the `dependencies` list...
+
+``` TOML
+[[package]]
+name = "trust-dns-resolver"
+version = "0.19.6"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "6759e8efc40465547b0dfce9500d733c65f969a4cbbfbe3ccf68daaa46ef179e"
+dependencies = [
+ "backtrace",
+ "cfg-if 0.1.10",
+ "futures",
+ "ipconfig",
+ "lazy_static",
+ "log 0.4.14",
+ "lru-cache",
+ "resolv-conf",
+ "smallvec",
+ "thiserror",
+ "tokio",
+ "trust-dns-proto",
+]
+```
+
+This will be the entry for `resolv-conf`.  Note `source`.
+
+``` TOML
+[[package]]
+name = "resolv-conf"
+version = "0.7.0"
+source = "git+https://github.com/gremlin/resolv-conf.git?branch=gremlin#58673b43ffebb5aab3beec67eae0dc53c5c66c2d"
+dependencies = [
+ "hostname",
+ "quick-error 2.0.1",
+]
+```
+
 ## Prepare to Synchronize
 
 The local computer has to be prepared.  This only needs to be done once.
@@ -88,53 +139,37 @@ git merge pag/add-no-strict
 git push
 ```
 
-## Using
+## Update Agent
 
-Using the work-in-progress is fairly easy.  In the root `Cargo.toml` file add the following to
-enable `no-strict`.
+The Agent `Cargo.lock` file has to be manually updated for the changes to take effect.
 
-``` TOML
-[patch.crates-io]
-resolv-conf = {version="0.7", git="https://github.com/gremlin/resolv-conf.git", branch="gremlin", features=["no-strict"]}
-```
+Navigate to the local copy of the Agent repository then...
 
-Build the project.  Carefully check the `Cargo.lock` file.  If everything worked then things that
-depend on `resolv-conf` will have entries like the following where `resolv-conf` is simply included
-in the `dependencies` list...
+``` bash
+# Switch to the `master` branch
+git checkout master
 
-``` TOML
-[[package]]
-name = "trust-dns-resolver"
-version = "0.19.6"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "6759e8efc40465547b0dfce9500d733c65f969a4cbbfbe3ccf68daaa46ef179e"
-dependencies = [
- "backtrace",
- "cfg-if 0.1.10",
- "futures",
- "ipconfig",
- "lazy_static",
- "log 0.4.14",
- "lru-cache",
- "resolv-conf",
- "smallvec",
- "thiserror",
- "tokio",
- "trust-dns-proto",
-]
-```
+# Ensure it is up-to-date
+git pull
 
-This will be the entry for `resolv-conf`.  Note `source`.
+# Create a new branch for the `resolv-conf` update
+git checkout -b resolv-conf/1
 
-``` TOML
-[[package]]
-name = "resolv-conf"
-version = "0.7.0"
-source = "git+https://github.com/gremlin/resolv-conf.git?branch=gremlin#58673b43ffebb5aab3beec67eae0dc53c5c66c2d"
-dependencies = [
- "hostname",
- "quick-error 2.0.1",
-]
+# Update the `Cargo.lock` file
+cargo update --package resolv-conf
+cargo build
+
+# Review the changes
+git diff
+
+# Commit the changes
+git commit -a -m "Freshen resolv-conf with the upstream repository."
+
+# Push the changes
+git push --set-upstream origin resolv-conf/1
+
+# Create a pull request
+https://github.com/gremlin/agent/pull/new/resolv-conf/1
 ```
 
 Resolv-conf
