@@ -1,15 +1,15 @@
 Gremlin
 =======
 
-This section contains notes for using this fork when building Agent.
+This section contains notes for using our fork of `resolv-conf` when building Agent.
 
-The expectation is that this fork will be kept synchronized with the upstream repository.  The
+The expectation is that our fork will be kept synchronized with the upstream repository.  The
 upstream is quite stable so updates are expected to be infrequent.
 
-Automating the synchronization is not worth the effort.  It will take a few hours to get that wrung
-out and about 30 minutes to document the process.
+Automating the synchronization is not worth the effort.  It will take a few hours to get automation
+wrung out versus about 30 minutes to document the process.  We'll just document.
 
-## Prepare
+## Prepare to Synchronize
 
 The local computer has to be prepared.  This only needs to be done once.
 
@@ -53,7 +53,7 @@ git push
 ## Synchronize Work-in-progress
 
 After synchronizing our master branch, for each branch that has work-in-progress do the following.
-At the time this was written there is just one branch: `pag/add-no-strict`
+At the time this was written there is just one work-in-progress branch: `pag/add-no-strict`
 
 ``` bash
 # Switch to the work-in-progress branch
@@ -90,8 +90,8 @@ git push
 
 ## Using
 
-Using the changes is fairly easy.  In the root `Cargo.toml` file add the following to enable
-`no-strict`.
+Using the work-in-progress is fairly easy.  In the root `Cargo.toml` file add the following to
+enable `no-strict`.
 
 ``` TOML
 [patch.crates-io]
