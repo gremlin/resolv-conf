@@ -11,15 +11,18 @@ out and about 30 minutes to document the process.
 
 ## Prepare
 
-The local computer has to be prepared.  This only needs to be done once.  The steps below...
+The local computer has to be prepared.  This only needs to be done once.
 
 ``` bash
 # Clone the fork
 git clone git@github.com:gremlin/resolv-conf.git
+
 # Navigate to the clone
 cd resolv-conf
+
 # Add a remote
 git remote add upstream https://github.com/tailhook/resolv-conf.git
+
 # Check the remotes
 git remote -v
 ```
@@ -28,54 +31,62 @@ That's it.  The local copy is ready for synchronizing.
 
 ## Synchronize Master
 
-Navigate to the clone...
-`cd resolv-conf`
+When the upstream master branch changes our copy needs to be updated.
 
-Ensure the `master` branch is active...
-`git checkout master`
+``` bash
+# Navigate to our clone
+cd resolv-conf
 
-Fetch any changes...
-`git fetch upstream`
+# Ensure the `master` branch is active
+git checkout master
 
-Merge those changes...
-`git merge upstream/master`
+# Fetch any changes
+git fetch upstream
 
-Push changes back to our fork...
-`git push`
+# Merge those changes
+git merge upstream/master
+
+# Push changes back to our fork
+git push
+```
 
 ## Synchronize Work-in-progress
 
-For each branch that has work-in-progress do the following.  At the time this was written there is
-just one branch: `pag/add-no-strict`
+After synchronizing our master branch, for each branch that has work-in-progress do the following.
+At the time this was written there is just one branch: `pag/add-no-strict`
 
-Switch to the work-in-progress branch...
-`git checkout pag/add-no-strict`
+``` bash
+# Switch to the work-in-progress branch
+git checkout pag/add-no-strict
 
-Ensure the local copy is up-to-date...
-`git pull`
+# Ensure the local copy is up-to-date
+git pull
 
-Merge changes from the upstream repository...
-`git merge master`
+# Merge changes from the upstream repository
+git merge master
 
-Push changes back to our fork...
-`git push`
+# Push changes back to our fork
+git push
+```
 
 ## Freshen our build-from-this-branch with the appropriate work-in-progress
 
 Agent is built from the `gremlin` branch.  This last step merges work-in-progress into the `gremlin`
 branch.
 
-Switch to the `gremlin` branch...
-`git checkout gremlin`
+``` bash
+# Switch to the `gremlin` branch
+git checkout gremlin
 
-Ensure the local copy is up-to-date...
-`git pull`
+# Ensure the local copy is up-to-date
+git pull
 
-Merge each work-in-progress branch...
-`git merge pag/add-no-strict`
+# Merge each work-in-progress branch
+git merge pag/add-no-strict
 
-Push changes back to our fork...
-`git push`
+# Push changes back to our fork
+git push
+```
 
 ## Using
 
